@@ -93,7 +93,7 @@ def new_member(bot: Bot, update: Update):
         for new_mem in new_members:
             # Give the owner a special welcome
             if new_mem.id == OWNER_ID:
-                update.effective_message.reply_text("My Master Lord Drona Just Joined_-_!")
+                update.effective_message.reply_text("My Owner Just Joined_-_!")
                 continue
 
             # Give start information when add bot to group
