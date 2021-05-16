@@ -27,9 +27,9 @@ def escape_html(word):
     return escape(word)
 
 PM_START_TEXT = """
-Sup {}, my name is **{}**! Im a sexy Bhabhi who can handle your dick's... 
+Sup {}, my name is **{}**! I can manage your single londa's !!... 
 
-Maintained by Nobody
+Maintained by Github xD
 
 Press /help to see what i can do !👍
 
