@@ -160,8 +160,7 @@ def slap(bot: Bot, update: Update, args: List[str]):
     else:
         curr_user = "[{}](tg://user?id={})".format(msg.from_user.first_name, msg.from_user.id)
 
-    user_id = extract_user(update.effective_message, args)
-    if user_id:
+    if user_id := extract_user(update.effective_message, args):
         slapped_user = bot.get_chat(user_id)
         user1 = curr_user
         if slapped_user.username:
@@ -170,7 +169,6 @@ def slap(bot: Bot, update: Update, args: List[str]):
             user2 = "[{}](tg://user?id={})".format(slapped_user.first_name,
                                                    slapped_user.id)
 
-    # if no target found, bot targets the sender
     else:
         user1 = "[{}](tg://user?id={})".format(bot.first_name, bot.id)
         user2 = curr_user
@@ -196,8 +194,7 @@ def get_bot_ip(bot: Bot, update: Update):
 
 @run_async
 def get_id(bot: Bot, update: Update, args: List[str]):
-    user_id = extract_user(update.effective_message, args)
-    if user_id:
+    if user_id := extract_user(update.effective_message, args):
         if update.effective_message.reply_to_message and update.effective_message.reply_to_message.forward_from:
             user1 = update.effective_message.reply_to_message.from_user
             user2 = update.effective_message.reply_to_message.forward_from
@@ -227,9 +224,7 @@ def get_id(bot: Bot, update: Update, args: List[str]):
 def info(bot: Bot, update: Update, args: List[str]):
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat # type: Optional[Chat]
-    user_id = extract_user(update.effective_message, args)
-
-    if user_id:
+    if user_id := extract_user(update.effective_message, args):
         user = bot.get_chat(user_id)
 
     elif not msg.reply_to_message and not args:
@@ -258,18 +253,17 @@ def info(bot: Bot, update: Update, args: List[str]):
 
     if user.id == OWNER_ID:
         text += "\n\nThis person is my owner."
-    else:
-        if user.id in SUDO_USERS:
-            text += "\n\nThis person is one of my sudo users."
-                   
-        else:
-            if user.id in SUPPORT_USERS:
-                text += "\n\nThis person is one of my support users." \
-                        
+    elif user.id in SUDO_USERS:
+        text += "\n\nThis person is one of my sudo users."
 
-            if user.id in WHITELIST_USERS:
-                text += "\n\nThis person has been whitelisted! " \
-                        "That means I'm not allowed to ban/kick them."
+    else:
+        if user.id in SUPPORT_USERS:
+            text += "\n\nThis person is one of my support users." \
+
+
+        if user.id in WHITELIST_USERS:
+            text += "\n\nThis person has been whitelisted! " \
+                    "That means I'm not allowed to ban/kick them."
 
     user_member = chat.get_member(user.id)
     if user_member.status == 'administrator':
@@ -278,7 +272,7 @@ def info(bot: Bot, update: Update, args: List[str]):
         if "custom_title" in result.keys():
             custom_title = result['custom_title']
             text += f"\n\nThis user holds the title <b>{custom_title}</b> here."
-            
+
     for mod in USER_INFO:
         try:
             mod_info = mod.__user_info__(user.id).strip()
@@ -376,12 +370,9 @@ def markdown_help(bot: Bot, update: Update):
 
 @run_async
 def reply_keyboard_remove(bot: Bot, update: Update):
-    reply_keyboard = []
-    reply_keyboard.append([
-        ReplyKeyboardRemove(
+    reply_keyboard = [[ReplyKeyboardRemove(
             remove_keyboard=True
-        )
-    ])
+        )]]
     reply_markup = ReplyKeyboardRemove(
         remove_keyboard=True
     )

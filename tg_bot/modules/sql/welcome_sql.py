@@ -102,8 +102,7 @@ LEAVE_BTN_LOCK = threading.RLock()
 
 def welcome_security(chat_id):
     try:
-        security = SESSION.query(WelcomeSecurity).get(str(chat_id))
-        if security:
+        if security := SESSION.query(WelcomeSecurity).get(str(chat_id)):
             return security.security
         return False
     finally:
@@ -112,8 +111,7 @@ def welcome_security(chat_id):
 
 def set_welcome_security(chat_id, security):
     with WS_LOCK:
-        prev = SESSION.query(WelcomeSecurity).get((str(chat_id)))
-        if prev:
+        if prev := SESSION.query(WelcomeSecurity).get((str(chat_id))):
             SESSION.delete(prev)
         welcome_s = WelcomeSecurity(str(chat_id), security)
         SESSION.add(welcome_s)
@@ -285,8 +283,7 @@ def get_gdbye_buttons(chat_id):
 
 def migrate_chat(old_chat_id, new_chat_id):
     with INSERTION_LOCK:
-        chat = SESSION.query(Welcome).get(str(old_chat_id))
-        if chat:
+        if chat := SESSION.query(Welcome).get(str(old_chat_id)):
             chat.chat_id = str(new_chat_id)
 
         with WELC_BTN_LOCK:
@@ -305,8 +302,9 @@ def migrate_chat(old_chat_id, new_chat_id):
  
 def clean_service(chat_id: Union[str, int]) -> bool:
     try:
-        chat_setting = SESSION.query(CleanServiceSetting).get(str(chat_id))
-        if chat_setting:
+        if chat_setting := SESSION.query(CleanServiceSetting).get(
+            str(chat_id)
+        ):
             return chat_setting.clean_service
         return False
     finally:
